@@ -1,3 +1,4 @@
+require('dotenv').config()
 const ejs = require ('ejs')
 const mongoose = require ('mongoose')
 const express = require ('express')
@@ -7,16 +8,14 @@ const blogSchema = require('./blogSchema')
 const app = express()
 mongoose.connect('mongodb+srv://MyFirstBlog:vr7QBBmxmFFKsy6@nodeapps.rxaannf.mongodb.net/blog')
 .then(() => {
-    app.listen(3000, ()=> {
-        console.log("App started on port 3000");
-
-    })
+        console.log("Database Connected")
 }).catch((err) => {
     console.log(err, "Database connection failed");
 })
 
 app.set('view engine', 'ejs')
 app.use('/assets', express.static('assets'))
+app.use(express.urlencoded({extended: true}));
 
 app.get('/', (req, res) =>{
     res.render('index')
@@ -48,3 +47,8 @@ app.get('/blogs', async (req, res) => {
     res.render('blogs', {posts: allPosts})
 })
 
+const port = process.env.PORT || 3000
+
+app.listen(port, () =>{
+    console.log(`App Started on port 3000 ${port}`)
+})
